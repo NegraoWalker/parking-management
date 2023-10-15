@@ -2,6 +2,9 @@ package com.walker.parkingmanagement.web.controller;
 
 import com.walker.parkingmanagement.entity.User;
 import com.walker.parkingmanagement.service.UserService;
+import com.walker.parkingmanagement.web.dto.CreateUserDTO;
+import com.walker.parkingmanagement.web.dto.ResponseUserDTO;
+import com.walker.parkingmanagement.web.dto.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +20,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create-user")
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        User userCreated = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
+    public ResponseEntity<ResponseUserDTO> createUser(@RequestBody CreateUserDTO createUserDTO){
+        User userCreated = userService.save(UserMapper.toUser(createUserDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(userCreated));
     }
     @GetMapping("/find-user/{id}")
     public ResponseEntity<User> findUserById(@PathVariable Long id){
