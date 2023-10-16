@@ -23,9 +23,15 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(()-> new RuntimeException("Usuário não encontrado!"));
     }
     @Transactional
-    public User update(Long id, String password) {
+    public User update(Long id, String currentPassword, String newPassword, String confirmPassword) {
+        if (!newPassword.equals(confirmPassword)){ //Testa se a nova senha é igual a confirma senha
+            throw new RuntimeException("Campo newPassword não é igual ao campo confirmPassword!");
+        }
         User user = findById(id);
-        user.setPassword(password);
+        if (!user.getPassword().equals(currentPassword)){ //Testa se a senha atual é a mesma cadastrada no banco de dados
+            throw new RuntimeException("currentPassword não confere!");
+        }
+        user.setPassword(newPassword);
         return user;
     }
     @Transactional(readOnly = true)

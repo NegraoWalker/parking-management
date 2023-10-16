@@ -4,6 +4,7 @@ import com.walker.parkingmanagement.entity.User;
 import com.walker.parkingmanagement.service.UserService;
 import com.walker.parkingmanagement.web.dto.CreateUserDTO;
 import com.walker.parkingmanagement.web.dto.ResponseUserDTO;
+import com.walker.parkingmanagement.web.dto.UpdatePasswordDTO;
 import com.walker.parkingmanagement.web.dto.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toDTO(userFindById));
     }
     @PutMapping("/update-password/{id}")
-    public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody User user) {
-        User userUpdatePassword = userService.update(id,user.getPassword());
-        return ResponseEntity.status(HttpStatus.OK).body(userUpdatePassword);
+    public ResponseEntity<ResponseUserDTO> updatePassword(@PathVariable Long id, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+        User userUpdatePassword = userService.update(id,updatePasswordDTO.getCurrentPassword(),updatePasswordDTO.getNewPassword(),updatePasswordDTO.getConfirmPassword());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(UserMapper.toDTO(userUpdatePassword));
     }
     @GetMapping("/find-user-all")
     public ResponseEntity<List<User>> findUserAll(){
