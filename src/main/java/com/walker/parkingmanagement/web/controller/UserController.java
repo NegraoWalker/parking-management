@@ -25,9 +25,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(userCreated));
     }
     @GetMapping("/find-user/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable Long id){
+    public ResponseEntity<ResponseUserDTO> findUserById(@PathVariable Long id){
         User userFindById = userService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(userFindById);
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toDTO(userFindById));
     }
     @PutMapping("/update-password/{id}")
     public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody User user) {
