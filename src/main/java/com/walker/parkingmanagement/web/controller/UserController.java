@@ -36,9 +36,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(UserMapper.toDTO(userUpdatePassword));
     }
     @GetMapping("/find-user-all")
-    public ResponseEntity<List<User>> findUserAll(){
+    public ResponseEntity<List<ResponseUserDTO>> findUserAll(){
         List<User> usersFindAll = userService.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(usersFindAll);
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDTO(usersFindAll));
     }
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
