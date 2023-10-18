@@ -6,6 +6,7 @@ import com.walker.parkingmanagement.web.dto.CreateUserDTO;
 import com.walker.parkingmanagement.web.dto.ResponseUserDTO;
 import com.walker.parkingmanagement.web.dto.UpdatePasswordDTO;
 import com.walker.parkingmanagement.web.dto.mapper.UserMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create-user")
-    public ResponseEntity<ResponseUserDTO> createUser(@RequestBody CreateUserDTO createUserDTO){
+    public ResponseEntity<ResponseUserDTO> createUser(@Valid @RequestBody CreateUserDTO createUserDTO){
         User userCreated = userService.save(UserMapper.toUser(createUserDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(userCreated));
     }
@@ -31,7 +32,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toDTO(userFindById));
     }
     @PutMapping("/update-password/{id}")
-    public ResponseEntity<ResponseUserDTO> updatePassword(@PathVariable Long id, @RequestBody UpdatePasswordDTO updatePasswordDTO) {
+    public ResponseEntity<ResponseUserDTO> updatePassword(@PathVariable Long id, @Valid @RequestBody UpdatePasswordDTO updatePasswordDTO) {
         User userUpdatePassword = userService.update(id,updatePasswordDTO.getCurrentPassword(),updatePasswordDTO.getNewPassword(),updatePasswordDTO.getConfirmPassword());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(UserMapper.toDTO(userUpdatePassword));
     }
