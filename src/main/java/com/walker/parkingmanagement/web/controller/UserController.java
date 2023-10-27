@@ -8,6 +8,7 @@ import com.walker.parkingmanagement.web.dto.UpdatePasswordDTO;
 import com.walker.parkingmanagement.web.dto.mapper.UserMapper;
 import com.walker.parkingmanagement.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -70,6 +71,13 @@ public class UserController {
         User userUpdatePassword = userService.update(id,updatePasswordDTO.getCurrentPassword(),updatePasswordDTO.getNewPassword(),updatePasswordDTO.getConfirmPassword());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(UserMapper.toDTO(userUpdatePassword));
     }
+
+    @Operation(summary = "Lista todos os usuários", description = "Recurso para listar todos os usuários cadastrados",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Lista com todos os usuários cadastrados",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ResponseUserDTO.class))))
+            })
     @GetMapping("/find-user-all")
     public ResponseEntity<List<ResponseUserDTO>> findUserAll(){
         List<User> usersFindAll = userService.findAll();
