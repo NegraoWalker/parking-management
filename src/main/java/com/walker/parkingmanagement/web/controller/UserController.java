@@ -75,14 +75,21 @@ public class UserController {
     @Operation(summary = "Lista todos os usuários", description = "Recurso para listar todos os usuários cadastrados",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Lista com todos os usuários cadastrados",
-                            content = @Content(mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = ResponseUserDTO.class))))
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ResponseUserDTO.class))))
             })
     @GetMapping("/find-user-all")
     public ResponseEntity<List<ResponseUserDTO>> findUserAll(){
         List<User> usersFindAll = userService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDTO(usersFindAll));
     }
+
+    @Operation(summary = "Deleta usuário", description = "Recurso para deletar usuário",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
+                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+            })
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.delete(id);
