@@ -136,4 +136,34 @@ class UserTest {
         org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(409);
     }
+
+    @Test
+    public void testFindUser_WithIdExisting_ShouldReturnUserWithStatus200(){
+        ResponseUserDTO responseUserBodyDTO = webTestClient
+                .get()
+                .uri("/api/v1/users/find-user/100")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(ResponseUserDTO.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getId()).isEqualTo(100);
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getUsername()).isEqualTo("ana@email.com");
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getRole()).isEqualTo("ADMIN");
+    }
+
+    @Test
+    public void testFindUser_WithIdNonexistent_ShouldReturnErrorMessageWithStatus404(){
+        ErrorMessage responseUserBodyDTO = webTestClient
+                .get()
+                .uri("/api/v1/users/find-user/0")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(404);
+    }
 }
