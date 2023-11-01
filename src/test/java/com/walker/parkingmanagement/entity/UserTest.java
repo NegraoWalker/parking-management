@@ -120,4 +120,20 @@ class UserTest {
         org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(422);
     }
+
+    @Test
+    public void testCreateUser_WithUsernameRepeated_ShouldReturnErrorMessageWithStatus409(){
+        ErrorMessage responseUserBodyDTO = webTestClient
+                .post()
+                .uri("/api/v1/users/create-user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new CreateUserDTO("ana@email.com","123456"))
+                .exchange()
+                .expectStatus().isEqualTo(409)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(409);
+    }
 }
