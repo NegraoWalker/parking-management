@@ -2,6 +2,7 @@ package com.walker.parkingmanagement.entity;
 
 import com.walker.parkingmanagement.web.dto.CreateUserDTO;
 import com.walker.parkingmanagement.web.dto.ResponseUserDTO;
+import com.walker.parkingmanagement.web.dto.UpdatePasswordDTO;
 import com.walker.parkingmanagement.web.exception.ErrorMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -166,4 +169,128 @@ class UserTest {
         org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
         org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(404);
     }
+
+    @Test
+    public void testUpdatePasswordUser_WithDataValid_ShouldReturnStatus204(){
+        webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("123456","245678","245678"))
+                .exchange()
+                .expectStatus().isNoContent();
+
+    }
+
+    @Test
+    public void testUpdatePasswordUser_WithIdNonexistent_ShouldReturnErrorMessageWithStatus404(){
+        ErrorMessage responseUserBodyDTO = webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/0")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("123456","245678","245678"))
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(404);
+    }
+
+    @Test
+    public void testUpdatePasswordUser_WithDataInvalid_ShouldReturnErrorMessageWithStatus422(){
+        ErrorMessage responseUserBodyDTO = webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("","",""))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(422);
+
+        webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("12345","24567","24567"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(422);
+
+        webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("1234567","2456789","2456789"))
+                .exchange()
+                .expectStatus().isEqualTo(422)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(422);
+    }
+
+    @Test
+    public void testUpdatePasswordUser_WithPasswordInvalid_ShouldReturnErrorMessageWithStatus400() {
+        ErrorMessage responseUserBodyDTO = webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("123456", "234567", "000000"))
+                .exchange()
+                .expectStatus().isEqualTo(400)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(400);
+
+        webTestClient
+                .put()
+                .uri("/api/v1/users/update-password/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new UpdatePasswordDTO("000000", "234567", "234567"))
+                .exchange()
+                .expectStatus().isEqualTo(400)
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.getStatus()).isEqualTo(400);
+    }
+
+    @Test
+    public void testFindAllUsers_WithIdExisting_ShouldReturnUserWithStatus200(){
+        List<ResponseUserDTO> responseUserBodyDTO =  webTestClient
+                .get()
+                .uri("/api/v1/users/find-user-all")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(ResponseUserDTO.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseUserBodyDTO.size()).isEqualTo(3);
+
+    }
+
+    @Test
+    public void testDeleteUser_ShouldReturnStatus204(){
+        webTestClient
+                .delete()
+                .uri("/api/v1/users/delete-user/100")
+                .exchange()
+                .expectStatus().isNoContent();
+    }
+
 }

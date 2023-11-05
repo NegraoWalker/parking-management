@@ -64,6 +64,8 @@ public class UserController {
                     @ApiResponse(responseCode = "400", description = "Senha não confere",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PutMapping("/update-password/{id}")
@@ -86,9 +88,7 @@ public class UserController {
     @Operation(summary = "Deleta usuário", description = "Recurso para deletar usuário",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
-                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)))
             })
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
