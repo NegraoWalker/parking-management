@@ -52,4 +52,14 @@ public class UserService {
     public void delete(Long id) {
        userRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(()-> new EntityNotFoundException(String.format("Usuário com '%s' não encontrado!",username)));
+    }
+
+    @Transactional(readOnly = true)
+    public User.Role findRoleByUsername(String username) {
+        return userRepository.findRoleByUsername(username);
+    }
 }
