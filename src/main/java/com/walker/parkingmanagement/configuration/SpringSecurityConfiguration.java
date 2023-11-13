@@ -24,7 +24,7 @@ public class SpringSecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(HttpMethod.POST, "api/v1/users/create-user"), antMatcher(HttpMethod.POST, "/api/v1/auth")).permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(antMatcher(HttpMethod.POST, "api/v1/users/create-user"), antMatcher(HttpMethod.POST, "/api/v1/users/auth")).permitAll().anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
