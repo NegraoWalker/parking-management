@@ -26,6 +26,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (token==null || !token.startsWith(JwtUtilities.JWT_BEARER)){
             log.info("JWT Token está nulo, vazio ou não iniciado com 'Bearer '!");
             filterChain.doFilter(request,response);
+            return;
         }
 
         if (!JwtUtilities.isTokenValid(token)) {

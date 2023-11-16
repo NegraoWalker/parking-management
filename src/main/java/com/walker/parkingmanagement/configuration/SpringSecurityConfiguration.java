@@ -27,8 +27,8 @@ public class SpringSecurityConfiguration {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(antMatcher(HttpMethod.POST, "api/v1/users/create-user")).permitAll()
-                                .requestMatchers(antMatcher(HttpMethod.POST, "api/v1/users/auth")).permitAll()
+                                .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/users/create-user")).permitAll()
+                                .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/users/auth")).permitAll()
                                 .anyRequest().authenticated()
                         )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
