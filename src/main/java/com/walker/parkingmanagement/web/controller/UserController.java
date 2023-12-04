@@ -83,6 +83,7 @@ public class UserController {
                             content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ResponseUserDTO.class))))
             })
     @GetMapping("/find-user-all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ResponseUserDTO>> findUserAll(){
         List<User> usersFindAll = userService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDTO(usersFindAll));
