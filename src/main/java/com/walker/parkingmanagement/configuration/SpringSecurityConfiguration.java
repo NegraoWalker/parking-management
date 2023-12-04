@@ -1,5 +1,6 @@
 package com.walker.parkingmanagement.configuration;
 
+import com.walker.parkingmanagement.jwt.JwtAuthenticationEntryPoint;
 import com.walker.parkingmanagement.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ public class SpringSecurityConfiguration {
                 .addFilterBefore(
                         jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
                 )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 .build();
     }
 
