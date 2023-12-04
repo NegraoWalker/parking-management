@@ -30,6 +30,12 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/users/create-user")).permitAll()
                                 .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/users/auth")).permitAll()
+                                .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/users")).permitAll()
+                                .requestMatchers(antMatcher("/docs-parking.html")).permitAll()
+                                .requestMatchers(antMatcher("/docs-parking**")).permitAll()
+                                .requestMatchers(antMatcher("/swagger-ui.html")).permitAll()
+                                .requestMatchers(antMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(antMatcher("/webjars/**")).permitAll()
                                 .anyRequest().authenticated()
                         )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
