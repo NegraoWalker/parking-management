@@ -47,10 +47,6 @@ public class User implements Serializable {
     private String modifiedBy;
 
 
-
-
-
-
     public enum Role{
         ROLE_ADMIN, ROLE_CLIENT
     }

@@ -38,24 +38,6 @@ public class SpringSecurityConfiguration {
                 .build();
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity
-//                .csrf(csrf -> csrf.disable())
-//                .formLogin(form -> form.disable())
-//                .httpBasic(basic -> basic.disable())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.POST,"api/v1/users/create-user").permitAll()
-//                        .requestMatchers(HttpMethod.POST,"api/v1/users/auth").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .addFilterBefore(
-//                        jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
-//                )
-//                .build();
-//    }
-
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter(){
         return new JwtAuthorizationFilter();
