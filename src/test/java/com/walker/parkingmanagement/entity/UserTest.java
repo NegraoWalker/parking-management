@@ -1,6 +1,5 @@
 package com.walker.parkingmanagement.entity;
 
-import auth.JwtAuth;
 import com.walker.parkingmanagement.web.dto.CreateUserDTO;
 import com.walker.parkingmanagement.web.dto.ResponseUserDTO;
 import com.walker.parkingmanagement.web.dto.UpdatePasswordDTO;
@@ -13,8 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = "/sql/users/users-insert.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)

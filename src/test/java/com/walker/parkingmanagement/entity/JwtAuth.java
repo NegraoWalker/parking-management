@@ -1,4 +1,4 @@
-package auth;
+package com.walker.parkingmanagement.entity;
 
 import com.walker.parkingmanagement.jwt.JwtToken;
 import com.walker.parkingmanagement.web.dto.LoginUserDTO;
