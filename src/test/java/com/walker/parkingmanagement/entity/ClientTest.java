@@ -1,9 +1,6 @@
 package com.walker.parkingmanagement.entity;
 
-import com.walker.parkingmanagement.web.dto.ClientCreateDto;
-import com.walker.parkingmanagement.web.dto.ClientResponseDto;
-import com.walker.parkingmanagement.web.dto.CreateUserDTO;
-import com.walker.parkingmanagement.web.dto.ResponseUserDTO;
+import com.walker.parkingmanagement.web.dto.*;
 import com.walker.parkingmanagement.web.exception.ErrorMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +38,7 @@ public class ClientTest {
     }
 
     @Test
-    public void testcriarCliente_ComCpfJaCadastrado_RetornarErrorMessageStatus409() {
+    public void testCreateClient_WithCpfAlreadyRegistered_ShouldReturnErrorMessageStatus409() {
         ErrorMessage responseBody = webTestClient
                 .post()
                 .uri("/api/v1/clients")
@@ -58,7 +55,7 @@ public class ClientTest {
     }
 
     @Test
-    public void criarCliente_ComDadosInvalidos_RetornarErrorMessageStatus422() {
+    public void testCreateClient_WithDataInvalid_ShouldReturnErrorMessageStatus422() {
         ErrorMessage responseBody = webTestClient
                 .post()
                 .uri("/api/v1/clients")
@@ -103,7 +100,7 @@ public class ClientTest {
     }
 
     @Test
-    public void criarCliente_ComUsuarioNaoPermitido_RetornarErrorMessageStatus403() {
+    public void testCreateClient_WithUserNotAllowed_ShouldReturnErrorMessageStatus403() {
         ErrorMessage responseBody = webTestClient
                 .post()
                 .uri("/api/v1/clients")
@@ -120,7 +117,7 @@ public class ClientTest {
     }
 
     @Test
-    public void buscarCliente_ComIdExistentePeloAdmin_RetornarClienteComStatus200() {
+    public void testSearchClient_WithIdExistingForAdmin_ShouldReturnClientWithStatus200() {
         ClientResponseDto responseBody = webTestClient
                 .get()
                 .uri("/api/v1/clients/10")
@@ -135,7 +132,7 @@ public class ClientTest {
     }
 
     @Test
-    public void buscarCliente_ComIdInexistentePeloAdmin_RetornarErrorMessageComStatus404() {
+    public void testSearchClient_WithIdNonexistentForAdmin_ShouldReturnErrorMessageWithStatus404() {
         ErrorMessage responseBody = webTestClient
                 .get()
                 .uri("/api/v1/clients/0")
@@ -150,7 +147,7 @@ public class ClientTest {
     }
 
     @Test
-    public void buscarCliente_ComIdExistentePeloCliente_RetornarErrorMessageComStatus403() {
+    public void testSearchClient_WithIdExistingForClient_ShouldReturnErrorMessageWithStatus403() {
         ErrorMessage responseBody = webTestClient
                 .get()
                 .uri("/api/v1/clients/0")
@@ -164,39 +161,39 @@ public class ClientTest {
         org.assertj.core.api.Assertions.assertThat(responseBody.getStatus()).isEqualTo(403);
     }
 
-//    @Test
-//    public void buscarClientes_ComPaginacaoPeloAdmin_RetornarClientesComStatus200() {
-//        PageableDto responseBody = webTestClient
-//                .get()
-//                .uri("/api/v1/clients")
-//                .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody(PageableDto.class)
-//                .returnResult().getResponseBody();
-//
-//        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-//        org.assertj.core.api.Assertions.assertThat(responseBody.getContent().size()).isEqualTo(2);
-//        org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(0);
-//        org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(1);
-//
-//        responseBody = webTestClient
-//                .get()
-//                .uri("/api/v1/clients?size=1&page=1")
-//                .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
-//                .exchange()
-//                .expectStatus().isOk()
-//                .expectBody(PageableDto.class)
-//                .returnResult().getResponseBody();
-//
-//        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
-//        org.assertj.core.api.Assertions.assertThat(responseBody.getContent().size()).isEqualTo(1);
-//        org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(1);
-//        org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(2);
-//    }
+    @Test
+    public void testSearchClient_WithPaginationForAdmin_ShouldReturnClienteWithStatus200() {
+        PageableDTO responseBody = webTestClient
+                .get()
+                .uri("/api/v1/clients")
+                .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(PageableDTO.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.getContent().size()).isEqualTo(2);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(0);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(1);
+
+        responseBody = webTestClient
+                .get()
+                .uri("/api/v1/clients?size=1&page=1")
+                .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(PageableDTO.class)
+                .returnResult().getResponseBody();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(responseBody.getContent().size()).isEqualTo(1);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getNumber()).isEqualTo(1);
+        org.assertj.core.api.Assertions.assertThat(responseBody.getTotalPages()).isEqualTo(2);
+    }
 
     @Test
-    public void buscarClientes_ComPaginacaoPeloCliente_RetornarErrorMessageComStatus403() {
+    public void testSearchClient_WithPaginationForClient_ShouldReturnErrorMessageWithStatus403() {
         ErrorMessage responseBody = webTestClient
                 .get()
                 .uri("/api/v1/clients")
@@ -211,10 +208,10 @@ public class ClientTest {
     }
 
     @Test
-    public void buscarCliente_ComDadosDoTokenDeCliente_RetornarClienteComStatus200() {
+    public void testSearchClient_WithDataTokenClient_ShouldReturnClientWithStatus200() {
         ClientResponseDto responseBody = webTestClient
                 .get()
-                .uri("/api/v1/clients/detalhes")
+                .uri("/api/v1/clients/details")
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "bia@email.com", "123456"))
                 .exchange()
                 .expectStatus().isOk()
@@ -229,10 +226,10 @@ public class ClientTest {
     }
 
     @Test
-    public void buscarCliente_ComDadosDoTokenDeAdministrador_RetornarErrorMessageComStatus403() {
+    public void testSearchClient_WithDataTokenAdmin_ShouldReturnErrorMessageWithStatus403() {
         ErrorMessage responseBody = webTestClient
                 .get()
-                .uri("/api/v1/clients/detalhes")
+                .uri("/api/v1/clients/details")
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
                 .exchange()
                 .expectStatus().isForbidden()
