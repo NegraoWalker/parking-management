@@ -20,15 +20,15 @@ public class ClientTest {
 
     @Test
     public void testCreateClient_WithValidData_ShouldReturnClientCreatedWithStatus201(){
-        ClientResponseDto responseBody = webTestClient
+        ClientResponseDTO responseBody = webTestClient
                 .post()
                 .uri("/api/v1/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "toby@email.com", "123456"))
-                .bodyValue(new ClientCreateDto("Tobias Ferreira", "91191064085"))
+                .bodyValue(new ClientCreateDTO("Tobias Ferreira", "91191064085"))
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(ClientResponseDto.class)
+                .expectBody(ClientResponseDTO.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
@@ -44,7 +44,7 @@ public class ClientTest {
                 .uri("/api/v1/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "toby@email.com", "123456"))
-                .bodyValue(new ClientCreateDto("Tobias Ferreira", "55352517047"))
+                .bodyValue(new ClientCreateDTO("Tobias Ferreira", "55352517047"))
                 .exchange()
                 .expectStatus().isEqualTo(409)
                 .expectBody(ErrorMessage.class)
@@ -61,7 +61,7 @@ public class ClientTest {
                 .uri("/api/v1/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "toby@email.com", "123456"))
-                .bodyValue(new ClientCreateDto("", ""))
+                .bodyValue(new ClientCreateDTO("", ""))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -75,7 +75,7 @@ public class ClientTest {
                 .uri("/api/v1/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "toby@email.com", "123456"))
-                .bodyValue(new ClientCreateDto("Bobb", "00000000000"))
+                .bodyValue(new ClientCreateDTO("Bobb", "00000000000"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -89,7 +89,7 @@ public class ClientTest {
                 .uri("/api/v1/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "toby@email.com", "123456"))
-                .bodyValue(new ClientCreateDto("Bobb", "911.910.640-85"))
+                .bodyValue(new ClientCreateDTO("Bobb", "911.910.640-85"))
                 .exchange()
                 .expectStatus().isEqualTo(422)
                 .expectBody(ErrorMessage.class)
@@ -106,7 +106,7 @@ public class ClientTest {
                 .uri("/api/v1/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
-                .bodyValue(new ClientCreateDto("Tobias Ferreira", "91191064085"))
+                .bodyValue(new ClientCreateDTO("Tobias Ferreira", "91191064085"))
                 .exchange()
                 .expectStatus().isForbidden()
                 .expectBody(ErrorMessage.class)
@@ -118,13 +118,13 @@ public class ClientTest {
 
     @Test
     public void testSearchClient_WithIdExistingForAdmin_ShouldReturnClientWithStatus200() {
-        ClientResponseDto responseBody = webTestClient
+        ClientResponseDTO responseBody = webTestClient
                 .get()
                 .uri("/api/v1/clients/10")
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "ana@email.com", "123456"))
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(ClientResponseDto.class)
+                .expectBody(ClientResponseDTO.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();
@@ -209,13 +209,13 @@ public class ClientTest {
 
     @Test
     public void testSearchClient_WithDataTokenClient_ShouldReturnClientWithStatus200() {
-        ClientResponseDto responseBody = webTestClient
+        ClientResponseDTO responseBody = webTestClient
                 .get()
                 .uri("/api/v1/clients/details")
                 .headers(JwtAuth.getHeaderAuthorization(webTestClient, "bia@email.com", "123456"))
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(ClientResponseDto.class)
+                .expectBody(ClientResponseDTO.class)
                 .returnResult().getResponseBody();
 
         org.assertj.core.api.Assertions.assertThat(responseBody).isNotNull();

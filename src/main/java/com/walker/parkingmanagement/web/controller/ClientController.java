@@ -5,8 +5,8 @@ import com.walker.parkingmanagement.jwt.JwtUserDetails;
 import com.walker.parkingmanagement.repository.projection.ClientProjection;
 import com.walker.parkingmanagement.service.ClientService;
 import com.walker.parkingmanagement.service.UserService;
-import com.walker.parkingmanagement.web.dto.ClientCreateDto;
-import com.walker.parkingmanagement.web.dto.ClientResponseDto;
+import com.walker.parkingmanagement.web.dto.ClientCreateDTO;
+import com.walker.parkingmanagement.web.dto.ClientResponseDTO;
 import com.walker.parkingmanagement.web.dto.PageableDTO;
 import com.walker.parkingmanagement.web.dto.mapper.ClientMapper;
 import com.walker.parkingmanagement.web.dto.mapper.PageableMapper;
@@ -46,7 +46,7 @@ public class ClientController {
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ClientResponseDto.class))),
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ClientResponseDTO.class))),
                     @ApiResponse(responseCode = "409", description = "Cliente - CPF já possui cadastro no sistema",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "422", description = "Recurso não processado por falta de dados ou dados inválidos",
@@ -56,7 +56,7 @@ public class ClientController {
             })
     @PostMapping("/create-client")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<ClientResponseDto> createClient(@RequestBody @Valid ClientCreateDto clientCreateDto, @AuthenticationPrincipal JwtUserDetails jwtUserDetails){
+    public ResponseEntity<ClientResponseDTO> createClient(@RequestBody @Valid ClientCreateDTO clientCreateDto, @AuthenticationPrincipal JwtUserDetails jwtUserDetails){
         Client client = ClientMapper.toClient(clientCreateDto);
         client.setUser(userService.findById(jwtUserDetails.getId()));
         clientService.save(client);
@@ -68,7 +68,7 @@ public class ClientController {
             security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso localizado com sucesso",
-                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ClientResponseDto.class))),
+                            content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ClientResponseDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Cliente não encontrado",
                             content = @Content(mediaType = " application/json;charset=UTF-8", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "403", description = "Recurso não permitido ao perfil de CLIENT",
@@ -76,7 +76,7 @@ public class ClientController {
             })
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ClientResponseDto> getByIdClient(@PathVariable Long id){
+    public ResponseEntity<ClientResponseDTO> getByIdClient(@PathVariable Long id){
         Client client = clientService.getById(id);
         return ResponseEntity.ok(ClientMapper.toDto(client));
     }
@@ -100,7 +100,7 @@ public class ClientController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso",
                             content = @Content(mediaType = " application/json;charset=UTF-8",
-                                    schema = @Schema(implementation = ClientResponseDto.class))
+                                    schema = @Schema(implementation = ClientResponseDTO.class))
                     ),
                     @ApiResponse(responseCode = "403", description = "Recurso não permitido ao perfil de CLIENT",
                             content = @Content(mediaType = " application/json;charset=UTF-8",
@@ -120,7 +120,7 @@ public class ClientController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Recurso recuperado com sucesso",
                             content = @Content(mediaType = " application/json;charset=UTF-8",
-                                    schema = @Schema(implementation = ClientResponseDto.class))
+                                    schema = @Schema(implementation = ClientResponseDTO.class))
                     ),
                     @ApiResponse(responseCode = "403", description = "Recurso não permitido ao perfil de ADMIN",
                             content = @Content(mediaType = " application/json;charset=UTF-8",
@@ -129,7 +129,7 @@ public class ClientController {
             })
     @GetMapping("/details")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<ClientResponseDto> getDetails(@AuthenticationPrincipal JwtUserDetails userDetails) {
+    public ResponseEntity<ClientResponseDTO> getDetails(@AuthenticationPrincipal JwtUserDetails userDetails) {
         Client cliente = clientService.searchByUserId(userDetails.getId());
         return ResponseEntity.ok(ClientMapper.toDto(cliente));
     }

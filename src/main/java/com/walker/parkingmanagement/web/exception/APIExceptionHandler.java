@@ -1,9 +1,6 @@
 package com.walker.parkingmanagement.web.exception;
 
-import com.walker.parkingmanagement.exception.CpfUniqueViolationException;
-import com.walker.parkingmanagement.exception.EntityNotFoundException;
-import com.walker.parkingmanagement.exception.PasswordInvalidException;
-import com.walker.parkingmanagement.exception.UserNameUniqueViolationException;
+import com.walker.parkingmanagement.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +21,7 @@ public class APIExceptionHandler {
         log.error("API Error: ",exception);
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).contentType(MediaType.APPLICATION_JSON).body(new ErrorMessage(request,HttpStatus.UNPROCESSABLE_ENTITY,"Campo(os) inválido(s)!!",result));
     }
-    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class})
+    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class, CodeUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> userUniqueViolationException(RuntimeException exception, HttpServletRequest request){
         log.error("API Error: ",exception);
         return ResponseEntity.status(HttpStatus.CONFLICT).contentType(MediaType.APPLICATION_JSON).body(new ErrorMessage(request,HttpStatus.CONFLICT, exception.getMessage()));
