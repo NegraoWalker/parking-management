@@ -9,6 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.walker.parkingmanagement.entity.Vacancy.StatusVacancy.FREE;
+
 @RequiredArgsConstructor
 @Service
 public class VacancyService {
@@ -29,4 +31,8 @@ public class VacancyService {
         return vacancyRepository.findByCode(code).orElseThrow(() -> new EntityNotFoundException(String.format("Vaga com código '%s' não foi encontrada",code)));
     }
 
+    @Transactional(readOnly = true)
+    public Vacancy findByVacancyFree() {
+        return vacancyRepository.findFirstByStatus(FREE).orElseThrow(()-> new EntityNotFoundException("Nenhuma vaga livre foi encontrada!"));
+    }
 }
