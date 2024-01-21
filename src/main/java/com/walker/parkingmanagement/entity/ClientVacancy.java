@@ -26,13 +26,13 @@ public class ClientVacancy { //Classe de relacionamento entre clientes e vagas
     private Long id;
     @Column(name = "number_parking_receipt", nullable = false, unique = true, length = 15)
     private String parkingReceipt; //Recibo do estacionamento
-    @Column(name = "licence_plate", nullable = false, unique = true, length = 8)
+    @Column(name = "licence_plate", nullable = false, unique = false, length = 8)
     private String licensePlate; //Placa do veiculo
-    @Column(name = "brand", nullable = false, unique = true, length = 45)
+    @Column(name = "brand", nullable = false, unique = false, length = 45)
     private String brand; //Marca do veiculo
-    @Column(name = "model", nullable = false, unique = true, length = 45)
+    @Column(name = "model", nullable = false, unique = false, length = 45)
     private String model; //Modelo do veiculo
-    @Column(name = "color", nullable = false, unique = true, length = 45)
+    @Column(name = "color", nullable = false, unique = false, length = 45)
     private String color; //Cor do veiculo
     @Column(name = "entry_date", nullable = false)
     private LocalDateTime entryDate; //Data de entrada do veiculo
