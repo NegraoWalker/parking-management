@@ -211,7 +211,7 @@ public class ParkingController {
     @GetMapping("/report")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<Void> getReport(HttpServletResponse response, @AuthenticationPrincipal JwtUserDetails userDetails) throws IOException {
-        String cpf = clientService.getById(userDetails.getId()).getCpf();
+        String cpf = clientService.searchByUserId(userDetails.getId()).getCpf();
         jasperService.addParams("CPF",cpf);
 
         byte[] bytes = jasperService.generatePdf();
